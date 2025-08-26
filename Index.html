@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+    <!-- Configuracion codigo del Sistema -->
+    <head>
+        <meta charset="UTF-8">
+        <meta name="vieport" content="width=device-width, initial-scale=1.0">
+        <title>MedDiagnosis - Sistema de Diagnóstico Médico</title>
+
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
+        rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+        <!-- System CSS -->
+        <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="css/auth.css">
+    </head>
+    <!--#######################################################################-->
+    <!-- Codigo de Cabezera del Sistema-->
+     <body>
+        <!-- Navbar -->
+         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    <i class="fas fa-stethoscope me-2"></i>MedDiagnosis
+                </a>
+                <div class="d-flex">
+                    <span class="navbar-text me-3" id="userEmailNav">usuario@ejemplo.com</span>
+                    <button class="btn btn-outline-secondary" id="logoutBtn">Cerrar Sesión</button>
+                </div>
+            </div>
+         </nav>
+        <!-- Main Content -->
+         <div class="container py-4">
+            <div class="row">
+                <!-- Sidebar (Panel de Diagnostico)-->
+                 <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0><i class="fas fa-diagnosis me-2">                                
+                            </i>Nuevo Diagnósitico</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="aler alert-info">
+                                <i class="fas fa-info-circle me-2"></i>Por favor, ingrese los síntomas que está experimentando.
+                            </div>
+                            <div class="mb-4">
+                                <h6>Sintomas</h6>
+                                <div id="symptomsContainer">
+                                    <div class="row sympotom-input">
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control symptom-name" placeholder="Nombre del síntoma">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select class="form-select symptom-severity">
+                                                <option value="" disabled selected>Severidad</option>
+                                                <option value="leve">Leve</option>
+                                                <option value="moderado">Moderado</option>
+                                                <option value="grave">Grave</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control symptom-duration" 
+                                                    placeholder="Duración (días)" value="1" min="1">
+                                                    <span class="input-group-text">días</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-primary mt-2" id="addSymptomBtn">
+                                        <i class="fas fa-plus me-1"></i>Agregar Síntoma
+                                    </button>
+                                </div>
+
+                                <div clas="mb-4">
+                                    <h6>Imagen de la Lesión (opcional)</h6>
+                                    <div class="border rounded p-3 text-center">
+                                        <input type="file" id="lesionImageInput" accept="image/*" class="form-control">
+                                    </div>
+                                    <div id="imagePlaceholder">
+                                        <i class="fas fa-cloud-upload-alt display-4 text-secondary mb-3"></i>
+                                        <p class="text-secondary">Sube una imagen de la lesión si es relevante.</p>
+                                    </div>
+                                    <img src="" class="preview-img hidden" id="imagepreview" alt="Vista Previa de la Imagen">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="ageInput" class="form-label">Edad</label>
+                                <input type="number" class="form-control" id="ageInput" 
+                                placeholder="Ingrese su edad" min="0" max="120" required>
+                            </div>
+                            <div class="mb-3">
+                                <input class="form-check-input" type="checkbox" id="urgentCheck">
+                                <label class="form-check-label" for="urgentCheck">
+                                    Considerar como caso urgente
+                                </label>
+                            </div>
+                            <button class="btn btn-primary w-100 py-2" id="diagnoseBtn">
+                                <i class="fas fa-search me-2"></i>Realizar Diagnóstico
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Resultados del Diagnostico -->
+                     <div class="card hidden" id="resultCard">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-file-medical me-2"></i>Resultados del diagnosticos
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert hidden" id="urgencyAlert">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <span id="urgencyText"></span>
+                            </div>
+                            <h6>Diagnóstico Probable</h6>
+                            <p id="diagnosisText" class="mb-3">Cargando...</p>
+                            <h6>Recomendaciones</h6>
+                            <p id="recommendationsText">Cargando...</p>
+                            <h6>Pronostico de evolución:</h6>
+                            <ul id="prgnosisList" class="mb-3">
+                                <li>Cargando...</li>
+                            </ul>
+                            <div class=" d-flex justify-content-end">
+                                <button class="btn btn-outline-secondary me-2" id="saveDiagnosisBtn">
+                                    <i class="fas fa-save me-1"></i>Guardar Diagnóstico
+                                </button>
+                                <button class="btn btn-primary" id="newDiagnosisBtn">
+                                    <i class="fas fa-plus me-1"></i>Nuevo Diagnóstico
+                                </button>
+                            </div>
+                        </div>
+                     </div>
+                 </div>
+                <!-- Sidebar (Historial de Diagnosticos)-->
+                 <div class="col-lg-4">
+                    <!--Panel Lateral -->
+                    <div class="card">
+                        <div class="carde-header bg-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-history me-2"></i>Historial de Diagnósticos
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="diagnosis-history" id="diagnosisHistory">
+                                <p class="text-center text-muted">No hay diagnósticos previos.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Informacion de Urgencias -->
+                     <div class="card">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-info-cicle me-2"></i>Nivel de Urgencia
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="urgency-critical mb-2">
+                                <i class="fas fa-exclamation-triangle me-2 text-danger"></i>
+                                <strong>Crítico:</strong> Requiere atención médica inmediata.
+                            </div>
+                            <div class="urgency-high mb-2">
+                                <i class="fas fa-exclamation-circle me-2 text-warning"></i>
+                                <strong>Alto:</strong> Se recomienda consultar a un médico pronto.
+                            </div>
+                            <div class="urgency-moderate mb-2">
+                                <i class="fas fa-info-circle me-2 text-info"></i>
+                                <strong>Moderado:</strong> Monitoree los síntomas y consulte si empeoran.
+                            </div>
+                            <div class="urgency-low">
+                                <i class="fas fa-check-circle me-2 text-success"></i>
+                                <strong>Bajo:</strong> Probablemente no es urgente, pero consulte si persisten los síntomas.
+                            </div>
+                        </div>
+                     </div>
+                 </div>
+            </div>
+         </div>
+         <!-- Modal de Login -->
+          <div class="modal fade" id="loginModal" data-bs-backdrop="static" 
+          data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Iniciar Sesion</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="emailInput" class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-control" id="emailInput" 
+                            placeholder="nombre@ejemplo.com">Ingrese su correo electrónico" required> 
+                        </div>
+                        <div class="mb-3">
+                            <label for="passwordInput" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="passwordInput" placeholder="Contraseña">
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberCheck">
+                            <label class="form-check-label" for="rememberCheck">Recordarme</label>
+                        </div>
+                        <div class="text-center">
+                            <p>¿No tiene una cuenta? <a href="#" id="showRegister">Regristrarse</a></p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary w-100" id="loginBtn">Iniciar Sesión</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal de Registro -->
+         <div class="modal fade" id="registerModal" data-bs-backdrop="static" 
+         data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Regristrarse</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="registerName" class="form-label">Nombre Completo</label>
+                            <input type="text" class="form-control" id="registerName" placeholder="Nombre Completo" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="registerEmail" class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-control" id="registerEmail" placeholder="nombre@ejemplo.com">
+                        </div>
+                        <div class="mb-3">
+                            <label for="registerPassword" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="registerPassword" placeholder="Contraseña">
+                        </div>
+                        <div class="mb-3">
+                            <label for="registerConfirmPassword" class="form-label">Confirmar Contraseña</label>
+                            <input type="password" class="form-control" id="registerConfirmPassword" placeholder="Confirmar Contraseña">
+                        </div>
+                        <div class="text-center">
+                            <p>¿Ya tiene una cuenta? <a href="#" id="showLogin">Iniciar Sesión</a></p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary w-100" id="registerBtn">
+                            Regristrarse
+                        </button>
+                    </div>
+                </div>
+            </div>
+         </div>
+         <!-- Bootstrap JS and dependencies -->
+          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+          <script src="js/app.js"></script>
+          <script src="js/auth.js"></script>
+          <script src="js/diagnosis.js"></script>
+          <script src="js/ui.js"></script>
+          <script src="js/storage.js"></script>
+     </body>
+</html>

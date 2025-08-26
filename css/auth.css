@@ -1,0 +1,60 @@
+.auth-modal .modal-content {
+    border-radius: 12px;
+}
+
+.auth-modal .modal-header {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.auth-modal .modal-footer {
+    border-top: 1px solid #e0e0e0;
+}
+
+.auth-divider {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.auth-divider span {
+    padding: 0 10px;
+    color: #6c757d;
+}
+
+.social-auth {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.social-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s;
+}
+
+.social-btn:hover {
+    background-color: #f8f9fa;
+}
+
+.social-btn.google {
+    color: #DB4437;
+}
+
+.social-btn.facebook {
+    color: #4267B2;
+}

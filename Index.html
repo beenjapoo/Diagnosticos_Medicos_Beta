@@ -1,27 +1,23 @@
 <!DOCTYPE html>
 <html lang="es">
-    <!-- Configuracion codigo del Sistema -->
     <head>
         <meta charset="UTF-8">
-        <meta name="vieport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>MedDiagnosis - Sistema de Diagnóstico Médico</title>
 
         <!-- Bootstrap CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
-        rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-        <!-- Custom CSS -->
+        <!-- FontAwesome CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
         <!-- System CSS -->
         <link rel="stylesheet" href="css/styles.css">
         <link rel="stylesheet" href="css/auth.css">
     </head>
-    <!--#######################################################################-->
-    <!-- Codigo de Cabezera del Sistema-->
-     <body>
+    <body>
         <!-- Navbar -->
-         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="#">
                     <i class="fas fa-stethoscope me-2"></i>MedDiagnosis
@@ -31,25 +27,26 @@
                     <button class="btn btn-outline-secondary" id="logoutBtn">Cerrar Sesión</button>
                 </div>
             </div>
-         </nav>
+        </nav>
         <!-- Main Content -->
-         <div class="container py-4">
+        <div class="container py-4">
             <div class="row">
-                <!-- Sidebar (Panel de Diagnostico)-->
-                 <div class="col-lg-8">
+                <!-- Panel de Diagnóstico -->
+                <div class="col-lg-8">
                     <div class="card">
                         <div class="card-header bg-white">
-                            <h5 class="mb-0><i class="fas fa-diagnosis me-2">                                
-                            </i>Nuevo Diagnósitico</h5>
+                            <h5 class="mb-0">
+                                <i class="fas fa-diagnoses me-2"></i>Nuevo Diagnóstico
+                            </h5>
                         </div>
                         <div class="card-body">
-                            <div class="aler alert-info">
+                            <div class="alert alert-info">
                                 <i class="fas fa-info-circle me-2"></i>Por favor, ingrese los síntomas que está experimentando.
                             </div>
                             <div class="mb-4">
-                                <h6>Sintomas</h6>
+                                <h6>Síntomas</h6>
                                 <div id="symptomsContainer">
-                                    <div class="row sympotom-input">
+                                    <div class="row symptom-input">
                                         <div class="col-md-6">
                                             <input type="text" class="form-control symptom-name" placeholder="Nombre del síntoma">
                                         </div>
@@ -62,12 +59,9 @@
                                             </select>
                                         </div>
                                         <div class="col-md-3">
-                                            <div class="col-md-3">
-                                                <div class="input-group">
-                                                    <input type="number" class="form-control symptom-duration" 
-                                                    placeholder="Duración (días)" value="1" min="1">
-                                                    <span class="input-group-text">días</span>
-                                                </div>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control symptom-duration" placeholder="Duración (días)" value="1" min="1">
+                                                <span class="input-group-text">días</span>
                                             </div>
                                         </div>
                                     </div>
@@ -76,7 +70,7 @@
                                     </button>
                                 </div>
 
-                                <div clas="mb-4">
+                                <div class="mb-4">
                                     <h6>Imagen de la Lesión (opcional)</h6>
                                     <div class="border rounded p-3 text-center">
                                         <input type="file" id="lesionImageInput" accept="image/*" class="form-control">
@@ -85,13 +79,12 @@
                                         <i class="fas fa-cloud-upload-alt display-4 text-secondary mb-3"></i>
                                         <p class="text-secondary">Sube una imagen de la lesión si es relevante.</p>
                                     </div>
-                                    <img src="" class="preview-img hidden" id="imagepreview" alt="Vista Previa de la Imagen">
+                                    <img src="" class="preview-img d-none" id="imagePreview" alt="Vista Previa de la Imagen">
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <label for="ageInput" class="form-label">Edad</label>
-                                <input type="number" class="form-control" id="ageInput" 
-                                placeholder="Ingrese su edad" min="0" max="120" required>
+                                <input type="number" class="form-control" id="ageInput" placeholder="Ingrese su edad" min="0" max="120" required>
                             </div>
                             <div class="mb-3">
                                 <input class="form-check-input" type="checkbox" id="urgentCheck">
@@ -104,15 +97,15 @@
                             </button>
                         </div>
                     </div>
-                    <!-- Resultados del Diagnostico -->
-                     <div class="card hidden" id="resultCard">
+                    <!-- Resultados del Diagnóstico -->
+                    <div class="card d-none" id="resultCard">
                         <div class="card-header bg-white">
                             <h5 class="mb-0">
-                                <i class="fas fa-file-medical me-2"></i>Resultados del diagnosticos
+                                <i class="fas fa-file-medical me-2"></i>Resultados del diagnóstico
                             </h5>
                         </div>
                         <div class="card-body">
-                            <div class="alert hidden" id="urgencyAlert">
+                            <div class="alert d-none" id="urgencyAlert">
                                 <i class="fas fa-exclamation-triangle me-2"></i>
                                 <span id="urgencyText"></span>
                             </div>
@@ -120,11 +113,11 @@
                             <p id="diagnosisText" class="mb-3">Cargando...</p>
                             <h6>Recomendaciones</h6>
                             <p id="recommendationsText">Cargando...</p>
-                            <h6>Pronostico de evolución:</h6>
-                            <ul id="prgnosisList" class="mb-3">
+                            <h6>Pronóstico de evolución:</h6>
+                            <ul id="prognosisList" class="mb-3">
                                 <li>Cargando...</li>
                             </ul>
-                            <div class=" d-flex justify-content-end">
+                            <div class="d-flex justify-content-end">
                                 <button class="btn btn-outline-secondary me-2" id="saveDiagnosisBtn">
                                     <i class="fas fa-save me-1"></i>Guardar Diagnóstico
                                 </button>
@@ -133,13 +126,12 @@
                                 </button>
                             </div>
                         </div>
-                     </div>
-                 </div>
-                <!-- Sidebar (Historial de Diagnosticos)-->
-                 <div class="col-lg-4">
-                    <!--Panel Lateral -->
+                    </div>
+                </div>
+                <!-- Historial de Diagnósticos -->
+                <div class="col-lg-4">
                     <div class="card">
-                        <div class="carde-header bg-white">
+                        <div class="card-header bg-white">
                             <h5 class="mb-0">
                                 <i class="fas fa-history me-2"></i>Historial de Diagnósticos
                             </h5>
@@ -150,11 +142,11 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Informacion de Urgencias -->
-                     <div class="card">
+                    <!-- Información de Urgencias -->
+                    <div class="card">
                         <div class="card-header bg-white">
                             <h5 class="mb-0">
-                                <i class="fas fa-info-cicle me-2"></i>Nivel de Urgencia
+                                <i class="fas fa-info-circle me-2"></i>Nivel de Urgencia
                             </h5>
                         </div>
                         <div class="card-body">
@@ -175,23 +167,21 @@
                                 <strong>Bajo:</strong> Probablemente no es urgente, pero consulte si persisten los síntomas.
                             </div>
                         </div>
-                     </div>
-                 </div>
+                    </div>
+                </div>
             </div>
-         </div>
-         <!-- Modal de Login -->
-          <div class="modal fade" id="loginModal" data-bs-backdrop="static" 
-          data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+        </div>
+        <!-- Modal de Login -->
+        <div class="modal fade" id="loginModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Iniciar Sesion</h5>
+                        <h5 class="modal-title">Iniciar Sesión</h5>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="emailInput" class="form-label">Correo Electrónico</label>
-                            <input type="email" class="form-control" id="emailInput" 
-                            placeholder="nombre@ejemplo.com">Ingrese su correo electrónico" required> 
+                            <input type="email" class="form-control" id="emailInput" placeholder="nombre@ejemplo.com" required>
                         </div>
                         <div class="mb-3">
                             <label for="passwordInput" class="form-label">Contraseña</label>
@@ -202,7 +192,7 @@
                             <label class="form-check-label" for="rememberCheck">Recordarme</label>
                         </div>
                         <div class="text-center">
-                            <p>¿No tiene una cuenta? <a href="#" id="showRegister">Regristrarse</a></p>
+                            <p>¿No tiene una cuenta? <a href="#" id="showRegister">Registrarse</a></p>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -212,12 +202,11 @@
             </div>
         </div>
         <!-- Modal de Registro -->
-         <div class="modal fade" id="registerModal" data-bs-backdrop="static" 
-         data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" id="registerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Regristrarse</h5>
+                        <h5 class="modal-title">Registrarse</h5>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
@@ -241,19 +230,17 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary w-100" id="registerBtn">
-                            Regristrarse
-                        </button>
+                        <button type="button" class="btn btn-primary w-100" id="registerBtn">Registrarse</button>
                     </div>
                 </div>
             </div>
-         </div>
-         <!-- Bootstrap JS and dependencies -->
-          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-          <script src="js/app.js"></script>
-          <script src="js/auth.js"></script>
-          <script src="js/diagnosis.js"></script>
-          <script src="js/ui.js"></script>
-          <script src="js/storage.js"></script>
-     </body>
+        </div>
+        <!-- Bootstrap JS and dependencies -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="js/app.js"></script>
+        <script src="js/auth.js"></script>
+        <script src="js/diagnosis.js"></script>
+        <script src="js/ui.js"></script>
+        <script src="js/storage.js"></script>
+    </body>
 </html>

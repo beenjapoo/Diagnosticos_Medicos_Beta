@@ -1,6 +1,5 @@
-// Funciones de Diagnóstico
-//      Añadir campo de síntoma
-function addSymptomInput(){
+// Funciones de diagnóstico
+function addSymptomInput() {
     const newSymptom = document.createElement('div');
     newSymptom.className = 'row symptom-input';
     newSymptom.innerHTML = `
@@ -21,112 +20,106 @@ function addSymptomInput(){
             </div>
         </div>
     `;
-    Element.symptomContainer.appendChild(newSymptom);  
+    elements.symptomsContainer.appendChild(newSymptom);
 }
 
-//----------------------------------------------------------------
-//      Funcion para manejar la subida de imagen
-function handleImageUpload(e){
+function handleImageUpload(e) {
     const file = e.target.files[0];
-    if (file){
+    if (file) {
         const reader = new FileReader();
-        reader.onload = function(event){
-            Elements.imagePreview.src = event.target.result;
-            Elements.imagePreview.classList.remove('hidden');
-            Elements.imagePlaceholder.classList.add('hidden');
+        reader.onload = function(event) {
+            elements.imagePreview.src = event.target.result;
+            elements.imagePreview.classList.remove('hidden');
+            elements.imagePlaceholder.classList.add('hidden');
         };
         reader.readAsDataURL(file);
     }
 }
 
-//----------------------------------------------------------------
-//      Realizar diagnóstico
-
-function performDiagnosis(){
+function performDiagnosis() {
     // Recopilar síntomas
-    const symptom = []
-    const symptomInputs = Elements.symptomContainer.querySelectorAll('.symptom-input');
-
+    const symptoms = [];
+    const symptomInputs = elements.symptomsContainer.querySelectorAll('.symptom-input');
+    
     symptomInputs.forEach(input => {
-        const name =input.querySelector('.symptom-name').value;
+        const name = input.querySelector('.symptom-name').value;
         const severity = input.querySelector('.symptom-severity').value;
         const duration = input.querySelector('.symptom-duration').value;
-
-        if(name){
-            symptom.push({ 
-                name, 
-                severity: parseInt(severity), 
+        
+        if (name) {
+            symptoms.push({
+                name,
+                severity: parseInt(severity),
                 duration: parseInt(duration)
             });
         }
     });
-
-    if (symptom.length === 0){
-        alert('Por favor, ingrese al menos un síntoma.');
+    
+    if (symptoms.length === 0) {
+        alert('Por favor, ingrese al menos un síntoma');
         return;
     }
-
-    // Recopliar otros datos
+    
+    // Recopilar otros datos
     const age = parseInt(document.getElementById('ageInput').value);
-    const conditions = document.getElementById('conditionsInput').value.split(',').map(c =>c.trim()).filter(c => c);
-    const hasImage = Elements.imagePreview.src && !Elements.imagePreview.classList.contains('hidden');
-    const isUrgent = document.getElementById('urgentCheck').checked
-
+    const conditions = document.getElementById('conditionsInput').value.split(',').map(c => c.trim()).filter(c => c);
+    const hasImage = elements.imagePreview.src && !elements.imagePreview.classList.contains('hidden');
+    const isUrgent = document.getElementById('urgentCheck').checked;
+    
     // Simular proceso de diagnóstico
-    const diagnosisResult = generateDiagnosis(symptom, age, conditions, hasImage, isUrgent);
-        currentDiagnosis = diagnosisResult;
-    // Mostrar resultado
+    const diagnosisResult = generateDiagnosis(symptoms, age, conditions, hasImage, isUrgent);
+    currentDiagnosis = diagnosisResult;
+    
+    // Mostrar resultados
     showDiagnosisResult(diagnosisResult);
 }
 
-//----------------------------------------------------------------
-//      Mostrar resultado del diagnóstico
-function generateDiagnosis(symptoms, age, conditions, hasImage, isUrgent){
-    // Algoritmo de diagnóstico
-    const severityScore = symptoms.reduce((sum,symptom)=> sum + 
-    (symptom.severity * symptom.duration),0)/symptoms.length;
-
-    const ageFactor = 1+ (Math.max(0,age - 40)/100) //Mayores de 40 años tienen mayor riesgos
-
+function generateDiagnosis(symptoms, age, conditions, hasImage, isUrgent) {
+    // Algoritmo simulado de diagnóstico
+    const severityScore = symptoms.reduce((sum, symptom) => sum + (symptom.severity * symptom.duration), 0) / symptoms.length;
+    const ageFactor = 1 + (Math.max(0, age - 40) / 100); // Mayores de 40 tienen mayor riesgo
+    
     let condition, recommendations, urgency;
-
+    
     // Determinar condición basada en síntomas (simulado)
-    if (symptoms.some(s => s.name.toLowerCase().includes('dolor  de cabeza')) && symptoms.some(s => s.name.toLowerCase().includes('vision'))){
+    if (symptoms.some(s => s.name.toLowerCase().includes('dolor cabeza')) && symptoms.some(s => s.name.toLowerCase().includes('visión'))) {
         condition = "Posible migraña o cefalea tensional";
-        recommendations = "Descansar en un lugar oscuro, tomar analgésicos de venta libre, evitar desencadenantes conocidos y mantengase en habitaciones oscuras.";
-    } else if (symptoms.some(s => s.name.toLowerCase().includes('fiebre'))&& symptoms.some(s => s.name.toLowerCase().includes('tos'))){
-        condition = "Posible infección respiratoria";
-        recommendations = "Mantenerse hidratado, descansar, usar medicamentos para reducir la fiebre y consultar a un médico si los síntomas empeoran.";
-    } else if (symptoms.some(s => s.name.toLowerCase().includes('erupcion'))){
-        condition = hasImage ? "Posible reacción alérgica o infección cutánea" : "Posible reacción alérgica";
-        recommendations = "Evitar el alérgeno conocido, usar cremas tópicas para aliviar la picazón y consultar a un dermatólogo si la erupción persiste.";
+        recommendations = "Descanse en una habitación oscura, manténgase hidratado y considere tomar analgésicos de venta libre. Evite luces brillantes y ruidos fuertes.";
+    } else if (symptoms.some(s => s.name.toLowerCase().includes('fiebre')) && symptoms.some(s => s.name.toLowerCase().includes('garganta'))) {
+        condition = "Posible infección viral o bacteriana";
+        recommendations = "Descanse, manténgase hidratado y controle la fiebre con medicamentos de venta libre. Si la fiebre persiste por más de 3 días, consulte a un médico.";
+    } else if (symptoms.some(s => s.name.toLowerCase().includes('erupción'))) {
+        condition = hasImage ? "Dermatitis o reacción alérgica (confirmado por imagen)" : "Posible dermatitis o reacción alérgica";
+        recommendations = "Evite rascarse el área afectada. Aplique una compresa fría y considere usar crema de hidrocortisona. Identifique y evite posibles alérgenos.";
     } else {
-        condition = "Condición no identificada";
-        recommendations = "Monitorear los síntomas y consultar a un profesional de la salud para una evaluación más detallada.";
+        condition = "Síntomas generales que requieren evaluación";
+        recommendations = "Monitoree sus síntomas, descanse y manténgase hidratado. Si los síntomas empeoran o persisten, consulte a un profesional de la salud.";
     }
-
+    
     // Determinar urgencia
-    if (isUrgent || severityScore > 7 * ageFactor){
+    if (isUrgent || severityScore > 7) {
         urgency = "Crítica";
-    } else if (severityScore > 5 * ageFactor){
+    } else if (severityScore > 5) {
         urgency = "Alta";
-    } else if (severityScore > 3 * ageFactor){
-        urgency = "Moderada";
+    } else if (severityScore > 3) {
+        urgency = "Media";
     } else {
         urgency = "Baja";
     }
-     
-    // Generar pronóstico simulado
+    
+    // Generar pronóstico
     const prognosis = [];
-    prognosis.push ("A corto plazo (24-48 horas): "+
-        severityScore > 5 ? "Monitorear síntomas, posible empeoramiento." : "Probable mejoría con cuidados en casa.");
-    prognosis.push ("A mediano plazo (3-7 días):"+
-        (severityScore > 5 ? "Se espera recuperación con tratamiento médico." : "Recuperación completa esperada.")
-    );
-    prognosis.push ("A largo plazo (1-4 semanas):"+
-        "Resolución completa esperada, seguimiento si es necesario."
-    );
-
+    prognosis.push("A corto plazo (24-48 horas): " + 
+        (severityScore > 5 ? "Los síntomas pueden empeorar sin tratamiento adecuado" : 
+        "Los síntomas probablemente se mantendrán estables o mejorarán levemente"));
+        
+    prognosis.push("A medio plazo (3-7 días): " + 
+        (severityScore > 5 ? "Se espera mejoría con el tratamiento adecuado" : 
+        "Mejoría significativa esperada con autocuidado"));
+        
+    prognosis.push("A largo plazo (1-2 semanas): " + 
+        "Resolución completa de los síntomas si se siguen las recomendaciones");
+    
     return {
         id: Date.now().toString(),
         date: new Date().toISOString(),
@@ -139,44 +132,39 @@ function generateDiagnosis(symptoms, age, conditions, hasImage, isUrgent){
         conditions,
         hasImage
     };
-
 }
 
-//----------------------------------------------------------------
-//      guardar diagnóstico en la "base de datos"
-function saveDiagnosis(){
-    if (!currentDiagnosis || currentUser ) return;
-
-    // Guardar diagnóstico en la "base de datos"
+function saveDiagnosis() {
+    if (!currentDiagnosis || !currentUser) return;
+    
+    // Guardar diagnóstico en la base de datos
     const diagnosisToSave = {
         ...currentDiagnosis,
         userId: currentUser.id
     };
-
-    database.diagnoses.pusch(diagnosisToSave);
+    
+    database.diagnoses.push(diagnosisToSave);
     saveToLocalStorage();
     updateDiagnosisHistory();
-
-    alert('Diagnostico guardado exitosamente.');
+    
+    alert('Diagnóstico guardado exitosamente');
 }
 
-//----------------------------------------------------------------
-//      Limpiar y reiniciar formulario para nuevo diagnóstico
-function newDiagnosis(){
+function newDiagnosis() {
     // Limpiar formulario
-    elements.symptomsContainer.innerHTML='',
+    elements.symptomsContainer.innerHTML = '';
     addSymptomInput();
-
-    document.getElementById,('ageInput').valueOf='';
-    document.getElementById('conditionsInput').value='';
-    document.getElementById('urgentCheck').checked=false;
-
-    elements.imagePreview.src='';
+    
+    document.getElementById('ageInput').value = '35';
+    document.getElementById('conditionsInput').value = '';
+    document.getElementById('urgentCheck').checked = false;
+    
+    elements.imagePreview.src = '';
     elements.imagePreview.classList.add('hidden');
     elements.imagePlaceholder.classList.remove('hidden');
-    elements.imageUpload.value='';
-
-    elements.resultCard.classList.add('hidden'),
-
+    elements.imageUpload.value = '';
+    
+    elements.resultCard.classList.add('hidden');
+    
     currentDiagnosis = null;
 }
